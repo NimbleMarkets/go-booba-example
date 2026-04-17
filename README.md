@@ -34,6 +34,24 @@ npx serve web
 
 Then open the URL the server prints (typically http://localhost:3000).
 
+### Taskfile
+
+A [Taskfile](https://taskfile.dev) wraps the commands above. With
+[`task`](https://taskfile.dev/installation/) installed:
+
+```sh
+task list         # show all tasks
+task build-native # build bin/example
+task build-web    # compile WASM + populate web/
+task serve        # build web assets and serve on :3000
+task test         # run go test ./...
+task go-lint      # run golangci-lint
+task clean        # remove build artifacts
+```
+
+`task` (no args) runs `test` + `build`. `task dev-deps` installs the Go dev
+tools (golangci-lint, errcheck, godoc).
+
 ## How It Works
 
 The example is a single `cmd/example/main.go` that calls `booba.Run(initialModel())`.

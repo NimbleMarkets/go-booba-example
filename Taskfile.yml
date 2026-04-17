@@ -1,0 +1,108 @@
+# go-booba-example - Copyright (c) 2026 Neomantra Corp.
+
+version: '3'
+
+vars:
+  GOLANGCI_LINT_VERSION: v2.10.1
+
+tasks:
+  default:
+    desc: 'Default task runs the "test" and "build" tasks'
+    deps:
+      - test
+      - build
+
+  list:
+    desc: 'Lists available tasks'
+    cmds:
+      - task --list-all
+
+  dev-deps:
+    desc: 'Install developer dependencies'
+    cmds:
+      - go install 'golang.org/x/tools/cmd/godoc@latest'
+      - go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@{{.GOLANGCI_LINT_VERSION}}
+      - go install github.com/kisielk/errcheck@latest
+
+  build:
+    desc: 'Build native binary and WASM assets'
+    deps:
+      - build-native
+      - build-web
+
+  test:
+    desc: 'Test go-booba-example'
+    deps:
+      - go-test
+
+###############################################################################
+
+  go-tidy:
+    desc: 'Go tidy all the things'
+    cmds:
+      - go mod tidy
+
+  go-update:
+    desc: 'Go update all the dependencies'
+    cmds:
+      - go get -u ./...
+
+  go-lint:
+    desc: Run golangci-lint with errcheck
+    cmds:
+      - golangci-lint run --enable=errcheck --timeout=5m ./...
+
+  go-test:
+    desc: 'Run Go tests'
+    cmds:
+      - go test ./...
+
+  build-native:
+    desc: 'Build native example binary'
+    deps: [go-tidy]
+    cmds:
+      - go build -o bin/example ./cmd/example/
+    sources:
+      - cmd/example/*.go
+    generates:
+      - bin/example
+
+  build-wasm:
+    desc: 'Compile example to WASM'
+    deps: [go-tidy]
+    cmds:
+      - go run github.com/NimbleMarkets/go-booba/cmd/booba-wasm-build -o web/app.wasm ./cmd/example/
+    sources:
+      - cmd/example/*.go
+    generates:
+      - web/app.wasm
+
+  build-assets:
+    desc: 'Populate web/ with wasm_exec.js, booba/, and ghostty-web/'
+    cmds:
+      - go run github.com/NimbleMarkets/go-booba/cmd/booba-assets web/
+    generates:
+      - web/wasm_exec.js
+      - web/booba/booba.js
+      - web/ghostty-web/ghostty-web.js
+
+  build-web:
+    desc: 'Build WASM binary and web assets'
+    deps:
+      - build-wasm
+      - build-assets
+
+  serve:
+    desc: 'Serve web/ locally on http://localhost:3000'
+    deps: [build-web]
+    cmds:
+      - npx serve web
+
+  clean:
+    desc: 'Clean build artifacts'
+    cmds:
+      - rm -f bin/example
+      - rm -f web/app.wasm
+      - rm -f web/wasm_exec.js
+      - rm -rf web/booba
+      - rm -rf web/ghostty-web
