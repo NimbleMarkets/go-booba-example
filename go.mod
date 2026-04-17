@@ -5,7 +5,7 @@ go 1.26.2
 require (
 	charm.land/bubbletea/v2 v2.0.5
 	charm.land/lipgloss/v2 v2.0.3
-	github.com/NimbleMarkets/go-booba v0.3.0
+	github.com/NimbleMarkets/go-booba v0.3.1
 )
 
 require (
