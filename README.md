@@ -23,10 +23,10 @@ Build and serve the WASM version:
 
 ```sh
 # 1. Compile the program to WASM.
-go run github.com/NimbleMarkets/go-booba/cmd/booba-wasm-build -o web/app.wasm ./cmd/example/
+go tool booba-wasm-build -o web/app.wasm ./cmd/example/
 
 # 2. Populate web/ with wasm_exec.js, booba/, and ghostty-web/.
-go run github.com/NimbleMarkets/go-booba/cmd/booba-assets web/
+go tool booba-assets web/
 
 # 3. Serve the web/ directory with any static file server.
 npx serve web

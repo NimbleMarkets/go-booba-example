@@ -71,7 +71,7 @@ tasks:
     desc: 'Compile example to WASM'
     deps: [go-tidy]
     cmds:
-      - go run github.com/NimbleMarkets/go-booba/cmd/booba-wasm-build -o web/app.wasm ./cmd/example/
+      - go tool booba-wasm-build -o web/app.wasm ./cmd/example/
     sources:
       - cmd/example/*.go
     generates:
@@ -80,7 +80,7 @@ tasks:
   build-assets:
     desc: 'Populate web/ with wasm_exec.js, booba/, and ghostty-web/'
     cmds:
-      - go run github.com/NimbleMarkets/go-booba/cmd/booba-assets web/
+      - go tool booba-assets web/
     generates:
       - web/wasm_exec.js
       - web/booba/booba.js

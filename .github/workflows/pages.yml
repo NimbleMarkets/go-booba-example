@@ -24,10 +24,10 @@ jobs:
           go-version-file: go.mod
 
       - name: Build WASM binary
-        run: go run github.com/NimbleMarkets/go-booba/cmd/booba-wasm-build -o web/app.wasm ./cmd/example/
+        run: go tool booba-wasm-build -o web/app.wasm ./cmd/example/
 
       - name: Set up web assets
-        run: go run github.com/NimbleMarkets/go-booba/cmd/booba-assets web/
+        run: go tool booba-assets web/
 
       - uses: actions/upload-pages-artifact@v5
         with:

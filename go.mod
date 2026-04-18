@@ -8,6 +8,11 @@ require (
 	github.com/NimbleMarkets/go-booba v0.3.1
 )
 
+tool (
+	github.com/NimbleMarkets/go-booba/cmd/booba-assets
+	github.com/NimbleMarkets/go-booba/cmd/booba-wasm-build
+)
+
 require (
 	github.com/charmbracelet/colorprofile v0.4.3 // indirect
 	github.com/charmbracelet/ultraviolet v0.0.0-20260414011438-8c69ec811b1e // indirect
