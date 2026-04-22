@@ -28,12 +28,31 @@ tasks:
     desc: 'Build native binary and WASM assets'
     deps:
       - build-native
+      - build-native-server
       - build-web
 
   test:
     desc: 'Test go-booba-example'
     deps:
       - go-test
+
+  serve:
+    desc: 'Serve web/ locally on http://localhost:3000'
+    deps: [build-web]
+    cmds:
+      - npx serve web
+
+  run:
+    desc: 'Run native example binary'
+    deps: [build-native]
+    cmds:
+      - bin/example
+
+  run-server:
+    desc: 'Run native server example binary'
+    deps: [build-native-server]
+    cmds:
+      - bin/example-server
 
 ###############################################################################
 
@@ -64,8 +83,20 @@ tasks:
       - go build -o bin/example ./cmd/example/
     sources:
       - cmd/example/*.go
+      - internal/model/*.go
     generates:
       - bin/example
+
+  build-native-server:
+    desc: 'Build native server example binary'
+    deps: [go-tidy]
+    cmds:
+      - go build -o bin/example-server ./cmd/example-server/
+    sources:
+      - cmd/example-server/*.go
+      - internal/model/*.go
+    generates:
+      - bin/example-server
 
   build-wasm:
     desc: 'Compile example to WASM'
@@ -92,16 +123,11 @@ tasks:
       - build-wasm
       - build-assets
 
-  serve:
-    desc: 'Serve web/ locally on http://localhost:3000'
-    deps: [build-web]
-    cmds:
-      - npx serve web
-
   clean:
     desc: 'Clean build artifacts'
     cmds:
       - rm -f bin/example
+      - rm -f bin/example-server
       - rm -f web/app.wasm
       - rm -f web/wasm_exec.js
       - rm -rf web/booba

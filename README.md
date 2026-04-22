@@ -34,6 +34,30 @@ npx serve web
 
 Then open the URL the server prints (typically http://localhost:3000).
 
+## Serving it over HTTP
+
+The same BubbleTea program can also be served over HTTP+WebSocket via
+go-booba's `serve` package, so users can connect from a browser or a native
+terminal without compiling the app to WASM themselves.
+
+Build and run the server entrypoint:
+
+```sh
+task build-native-server
+./bin/example-server --listen 127.0.0.1:8080
+```
+
+Open `http://127.0.0.1:8080/` in a browser to use the built-in terminal UI
+(BoobaTerminal), or connect from a native terminal using the companion
+`booba-sip-client`:
+
+```sh
+booba-sip-client ws://localhost:8080/ws
+```
+
+`booba-sip-client` ships with go-booba (`cmd/booba-sip-client/`) for headless
+or SSH-tunneled use. Press Ctrl-] then type `quit` to disconnect.
+
 ### Taskfile
 
 A [Taskfile](https://taskfile.dev) wraps the commands above. With
@@ -52,9 +76,13 @@ task clean        # remove build artifacts
 `task` (no args) runs `test` + `build`. `task dev-deps` installs the Go dev
 tools (golangci-lint, errcheck, godoc).
 
+To run in the terminal or serve via webpage:
+  * `task run`
+  * `task serve`
+
 ## How It Works
 
-The example is a single `cmd/example/main.go` that calls `booba.Run(initialModel())`.
+The example is a `cmd/example/main.go` that calls `booba.Run(model.InitialModel())`.
 `booba.Run` is platform-polymorphic:
 
 - **Native builds** call `tea.NewProgram(model).Run()` — a normal BubbleTea app.
@@ -79,7 +107,11 @@ Two helper commands from `go-booba` handle the rest:
 ```
 ├── .github/workflows/pages.yml   # Build WASM + deploy to GitHub Pages
 ├── cmd/example/
-│   └── main.go                   # BubbleTea model + booba.Run entrypoint
+│   └── main.go                   # booba.Run entrypoint (native + WASM)
+├── cmd/example-server/
+│   └── main.go                   # HTTP+WebSocket server entrypoint
+├── internal/model/
+│   └── model.go                  # Shared BubbleTea model
 ├── web/
 │   └── index.html                # Static page (customize freely)
 └── go.mod
@@ -90,7 +122,7 @@ The following are generated and gitignored: `web/app.wasm`, `web/wasm_exec.js`,
 
 ## Customizing
 
-Replace the model, update, and view functions in `cmd/example/main.go` with
+Replace the model, update, and view functions in `internal/model/model.go` with
 your own BubbleTea program. The model should handle `tea.WindowSizeMsg` to
 adapt to the browser window size.
 
