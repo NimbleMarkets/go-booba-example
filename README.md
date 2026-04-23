@@ -1,5 +1,7 @@
 # go-booba-example
 
+[Link the GitHub Pages Example](https://nimblemarkets.github.io/go-booba-example/)
+
 A complete example of using [go-booba](https://github.com/NimbleMarkets/go-booba) to host a [BubbleTea](https://github.com/charmbracelet/bubbletea) program on GitHub Pages.
 
 The BubbleTea program compiles to WebAssembly and runs entirely in the browser —
