@@ -73,6 +73,7 @@ tasks:
 
   go-test:
     desc: 'Run Go tests'
+    deps: [go-tidy]
     cmds:
       - go test ./...
 
