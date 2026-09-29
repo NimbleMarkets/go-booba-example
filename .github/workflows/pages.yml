@@ -24,7 +24,10 @@ jobs:
           go-version-file: go.mod
 
       - name: Build WASM binary
-        run: go tool booba-wasm-build -o web/app.wasm ./cmd/example/
+        env:
+          GOOS: js
+          GOARCH: wasm
+        run: go build -o web/app.wasm ./cmd/example/
 
       - name: Set up web assets
         run: go tool booba-assets web/

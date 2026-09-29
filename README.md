@@ -25,7 +25,7 @@ Build and serve the WASM version:
 
 ```sh
 # 1. Compile the program to WASM.
-go tool booba-wasm-build -o web/app.wasm ./cmd/example/
+GOOS=js GOARCH=wasm go build -o web/app.wasm ./cmd/example/
 
 # 2. Populate web/ with wasm_exec.js, booba/, and ghostty-web/.
 go tool booba-assets web/
@@ -97,12 +97,28 @@ In the browser, [ghostty-web](https://github.com/coder/ghostty-web)
 renders a real terminal emulator in a canvas, and booba's `BoobaWasmAdapter`
 shuttles data between that terminal and your compiled program.
 
-Two helper commands from `go-booba` handle the rest:
+WASM compilation uses the standard Go toolchain (`GOOS=js GOARCH=wasm go build`) —
+no custom build tool is needed. The `booba-assets` helper (declared as a
+`tool` in `go.mod`) populates `web/` with `wasm_exec.js`, the booba terminal
+wrapper, and ghostty-web runtime files.
 
-- `booba-wasm-build` — compiles to WASM, working around BubbleTea v2's missing
-  `js/wasm` build tags.
-- `booba-assets` — populates `web/` with `wasm_exec.js`, the booba terminal
-  wrapper, and ghostty-web runtime files.
+### BubbleTea fork
+
+Building for the browser depends on a
+[patched BubbleTea fork](https://github.com/neomantra/bubbletea/tree/nm-wasm)
+that adds `GOOS=js` support (not yet merged upstream). Go does not propagate
+`replace` directives from dependencies, so this repo's `go.mod` carries its own:
+
+```
+replace charm.land/bubbletea/v2 => github.com/neomantra/bubbletea/v2 v2.0.0-20260928192001-1b36865b418a
+```
+
+Keep this line in sync with
+[go-booba's `go.mod`](https://github.com/NimbleMarkets/go-booba/blob/main/go.mod)
+when upgrading go-booba. Compile errors inside `charm.land/bubbletea/v2` such as
+`p.listenForResize undefined` mean the directive is missing or stale.
+
+Go 1.26 or newer is required.
 
 ## Project Structure
 

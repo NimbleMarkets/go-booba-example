@@ -102,10 +102,14 @@ tasks:
   build-wasm:
     desc: 'Compile example to WASM'
     deps: [go-tidy]
+    env:
+      GOOS: js
+      GOARCH: wasm
     cmds:
-      - go tool booba-wasm-build -o web/app.wasm ./cmd/example/
+      - go build -o web/app.wasm ./cmd/example/
     sources:
       - cmd/example/*.go
+      - internal/model/*.go
     generates:
       - web/app.wasm
 
