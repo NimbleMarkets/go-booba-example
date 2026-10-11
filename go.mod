@@ -8,15 +8,15 @@ replace charm.land/bubbletea/v2 => github.com/neomantra/bubbletea/v2 v2.0.0-2026
 require (
 	charm.land/bubbletea/v2 v2.0.10
 	charm.land/lipgloss/v2 v2.0.6
-	github.com/NimbleMarkets/go-booba v0.7.0
+	github.com/NimbleMarkets/go-booba v0.8.0
 )
 
 tool github.com/NimbleMarkets/go-booba/cmd/booba-assets
 
 require (
 	github.com/charmbracelet/colorprofile v0.4.3 // indirect
-	github.com/charmbracelet/ultraviolet v0.0.0-20260928045949-bbf040aedf25 // indirect
-	github.com/charmbracelet/x/ansi v0.11.8 // indirect
+	github.com/charmbracelet/ultraviolet v0.0.0-20261008173134-6b8d4baf91b4 // indirect
+	github.com/charmbracelet/x/ansi v0.11.9 // indirect
 	github.com/charmbracelet/x/conpty v0.2.0 // indirect
 	github.com/charmbracelet/x/term v0.2.2 // indirect
 	github.com/charmbracelet/x/termios v0.1.1 // indirect
